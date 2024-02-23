@@ -1,0 +1,230 @@
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-color: #e5e5e5;
+  --card-bg-color: #f1f1f1;
+  --text-color: #171717;
+  --link-color: #2762f3;
+  --transition-duration: 0.25s;
+  font-size: calc(16px + (20-16) * (100vw - 320px) / (2560 - 320));
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font: 1em / 1.5 "Hind", sans-serif;
+}
+
+a {
+  color: var(--link-color);
+}
+
+/* 图片容器网格布局 */
+.image-grid {
+  display: grid;
+  grid-gap: 1.5em;
+  margin: 1.5em 1.5em 13.5em 1.5em;
+}
+
+/* 图像card */
+.image-grid_card {
+  animation: flyIn var(--transition-duration) ease-in;
+  background-color: var(--card-bg-color);
+  border-radius: 0.25em;
+  box-shadow: 0 0 0.375em #0003;
+  width: 100%;
+}
+
+/* 图像（每张图像放在a标签下） */
+.image-grid_card a {
+  background-color: #0003;
+  border-radius: 0.25em 0.25em 0 0;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  height: 9.75em;
+  will-change: transform;
+}
+
+/* 图像focus时的效果 */
+.image-grid_card a:focus {
+  outline: transparent;
+}
+
+.image-grid_card a:focus .image-grid_card-thumb,
+.image-grid_card a:hover .image-grid_card-thumb {
+  opacity: 0.5;
+}
+
+/* 图像（img元素） */
+.image-grid_card-thumb {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  transition: all var(--transition-duration) linear;
+  transform: translate(-50%, -50%);
+}
+
+/* 如果图像的宽度小于高度（图像类似于垂直状的长方形），让图像的宽度拉伸至其容器元素a标签的100%，占满整个card */
+.image-grid_card-thumb-portrait {
+  width: 100%;
+  height: auto;
+}
+
+/* 每张图像下的图像title */
+.image-grid_card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0.375em 0.75em;
+  text-align: center;
+}
+
+/* 当前页面所有图像渲染前的loading效果 */
+.image-grid_status {
+  animation: fadeIn var(--transition-duration) linear;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+}
+.pl,
+.pl:before,
+.pl:after {
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.pl {
+  margin: 0 auto 1.5em auto;
+  position: relative;
+  width: 3em;
+  height: 3em;
+}
+.pl:before,
+.pl:after {
+  background: currentColor;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  transform-origin: 50% 100%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.pl-fade:before {
+  animation-name: fadeA;
+}
+.pl-fade:after {
+  animation-name: fadeB;
+}
+
+/* 动画 */
+@keyframes flyIn {
+  from {
+    opacity: 0;
+    transform: translateY(3em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeA {
+  from,
+  to {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  25%,
+  75.1% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  25.1%,
+  75% {
+    opacity: 0;
+    transform: rotate(180deg);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+}
+@keyframes fadeB {
+  from,
+  50% {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+  25% {
+    opacity: 1;
+    transform: rotate(90deg);
+  }
+  50.1%,
+  to {
+    opacity: 0;
+    transform: rotate(270deg);
+  }
+  75% {
+    opacity: 1;
+    transform: rotate(270deg);
+  }
+}
+
+/* 不同尺寸设备兼容，媒体查询 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #171717;
+    --card-bg-color: #242424;
+    --text-color: #f1f1f1;
+    --link-color: #5785f6;
+  }
+}
+@media (min-width: 512px) {
+  .image-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 768px) {
+  .image-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .image-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 1280px) {
+  .image-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 1536px) {
+  .image-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
